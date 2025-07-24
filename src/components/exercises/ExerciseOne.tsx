@@ -50,23 +50,23 @@ const ExerciseOne = ({ onComplete }: ExerciseOneProps) => {
               )}
             >
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-full h-1 bg-[#6F00FF] opacity-50 animate-pulse" />
+                <div className="h-full w-1 bg-[#6F00FF] opacity-50 animate-pulse" />
               </div>
               <div className="absolute inset-0 flex items-center justify-center">
                 <span className="text-white text-2xl">✂️</span>
               </div>
             </div>
           ) : (
-            <div className="flex animate-fade-in">
+            <div className="flex flex-col animate-fade-in">
               <div
                 className={cn(
-                  "w-24 h-48 bg-[#0826FF] rounded-l-lg transition-all duration-500",
+                  "w-48 h-24 bg-[#0826FF] rounded-t-lg transition-all duration-500",
                   isCorrect === true && "animate-pulse border-4 border-[#FF6F00]"
                 )}
               />
               <div
                 className={cn(
-                  "w-24 h-48 bg-[#2F2E41] rounded-r-lg transition-all duration-500",
+                  "w-48 h-24 bg-[#2F2E41] rounded-b-lg transition-all duration-500",
                   isCorrect === true && "animate-pulse border-4 border-[#FF6F00]"
                 )}
               />

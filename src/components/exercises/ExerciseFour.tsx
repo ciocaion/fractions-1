@@ -11,12 +11,30 @@ const ExerciseFour = ({ onComplete }: ExerciseFourProps) => {
   const [availablePieces] = useState(["1/4", "1/4", "1/2", "1/3"]);
   const [usedPieces, setUsedPieces] = useState<number[]>([]);
   const [isComplete, setIsComplete] = useState(false);
+  const [draggedPiece, setDraggedPiece] = useState<number | null>(null);
 
   const dropZones = [
     { id: 0, correctPiece: "1/4", color: "#90EE90" },
     { id: 1, correctPiece: "1/4", color: "#FFD700" },
     { id: 2, correctPiece: "1/2", color: "#FF69B4", isDouble: true },
   ];
+
+  const handleDragStart = (e: React.DragEvent, pieceIndex: number) => {
+    if (usedPieces.includes(pieceIndex)) return;
+    setDraggedPiece(pieceIndex);
+    e.dataTransfer.setData("text/plain", pieceIndex.toString());
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (e: React.DragEvent, zoneId: number) => {
+    e.preventDefault();
+    const pieceIndex = parseInt(e.dataTransfer.getData("text/plain"));
+    handlePieceDrop(pieceIndex, zoneId);
+    setDraggedPiece(null);
+  };
 
   const handlePieceDrop = (pieceIndex: number, zoneId: number) => {
     const piece = availablePieces[pieceIndex];
@@ -73,10 +91,17 @@ const ExerciseFour = ({ onComplete }: ExerciseFourProps) => {
                 droppedPieces[zone.id] ? `bg-[${zone.color}] border-solid` : "bg-[#F0F0F0]",
                 isComplete && "animate-pulse border-[#FF6F00] border-4"
               )}
+              onDragOver={handleDragOver}
+              onDrop={(e) => handleDrop(e, zone.id)}
+              style={{ backgroundColor: droppedPieces[zone.id] ? zone.color : '#F0F0F0' }}
             >
               {droppedPieces[zone.id] && (
                 <div className="h-full flex items-center justify-center text-white font-bold text-xl">
-                  {droppedPieces[zone.id]}
+                  <div className="flex flex-col items-center">
+                    <span className="text-2xl">{droppedPieces[zone.id].split('/')[0]}</span>
+                    <div className="w-6 h-0.5 bg-white my-1"></div>
+                    <span className="text-2xl">{droppedPieces[zone.id].split('/')[1]}</span>
+                  </div>
                 </div>
               )}
             </div>
@@ -100,23 +125,18 @@ const ExerciseFour = ({ onComplete }: ExerciseFourProps) => {
                   "border-2 border-[#2F2E41]",
                   usedPieces.includes(index) 
                     ? "opacity-30 cursor-not-allowed bg-gray-400" 
-                    : `bg-[${getPieceColor(piece)}] hover:shadow-lg`
+                    : `hover:shadow-lg`,
+                  draggedPiece === index && "scale-110 rotate-3"
                 )}
-                onClick={() => {
-                  // Simple click to fill next available correct zone
-                  if (usedPieces.includes(index)) return;
-                  
-                  const nextZone = dropZones.find(z => 
-                    !droppedPieces[z.id] && z.correctPiece === piece
-                  );
-                  
-                  if (nextZone) {
-                    handlePieceDrop(index, nextZone.id);
-                  }
-                }}
+                draggable={!usedPieces.includes(index)}
+                onDragStart={(e) => handleDragStart(e, index)}
                 style={{ backgroundColor: usedPieces.includes(index) ? '#9CA3AF' : getPieceColor(piece) }}
               >
-                {piece}
+                <div className="flex flex-col items-center">
+                  <span className="text-xl">{piece.split('/')[0]}</span>
+                  <div className="w-4 h-0.5 bg-white my-1"></div>
+                  <span className="text-xl">{piece.split('/')[1]}</span>
+                </div>
               </div>
             ))}
           </div>

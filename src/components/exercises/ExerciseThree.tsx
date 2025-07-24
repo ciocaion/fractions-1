@@ -1,6 +1,7 @@
 
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import FractionSelector from "../FractionSelector";
 
 interface ExerciseThreeProps {
   onComplete: () => void;
@@ -10,6 +11,9 @@ const ExerciseThree = ({ onComplete }: ExerciseThreeProps) => {
   const [rightSplit, setRightSplit] = useState(false);
   const [selectedParts, setSelectedParts] = useState<number[]>([]);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+  const [showSumTask, setShowSumTask] = useState(false);
+  const [selectedSum, setSelectedSum] = useState<string | null>(null);
+  const [sumIsCorrect, setSumIsCorrect] = useState<boolean | null>(null);
 
   const handleRightSplit = () => {
     setRightSplit(true);
@@ -23,33 +27,26 @@ const ExerciseThree = ({ onComplete }: ExerciseThreeProps) => {
       setSelectedParts(newSelected);
       
       if (newSelected.length === 2) {
-        // Check if both selected parts are quarters (parts 0, 1, 2, 3 where 0,1 are left quarters and 2,3 are right quarters)
-        const isCorrectMatch = 
-          (newSelected.includes(0) && newSelected.includes(1)) || // Left quarters
-          (newSelected.includes(2) && newSelected.includes(3));   // Right quarters
-        
-        setIsCorrect(isCorrectMatch);
-        
-        if (isCorrectMatch) {
-          setTimeout(() => {
-            onComplete();
-          }, 2000);
-        } else {
-          setTimeout(() => {
-            setSelectedParts([]);
-            setIsCorrect(null);
-          }, 1500);
-        }
+        // Any two parts are correct since all are ¼
+        setIsCorrect(true);
+        setTimeout(() => {
+          setShowSumTask(true);
+        }, 1500);
       }
     }
   };
 
-  const parts = [
-    { color: "#90EE90", label: "¼" }, // Left top quarter
-    { color: "#FFD700", label: "¼" }, // Left bottom quarter  
-    { color: "#FF69B4", label: "¼" }, // Right top quarter
-    { color: "#87CEEB", label: "¼" }, // Right bottom quarter
-  ];
+  const handleSumSelect = (sum: string) => {
+    setSelectedSum(sum);
+    const correct = sum === "1/2";
+    setSumIsCorrect(correct);
+    
+    if (correct) {
+      setTimeout(() => {
+        onComplete();
+      }, 1500);
+    }
+  };
 
   return (
     <div className="text-center">
@@ -122,10 +119,10 @@ const ExerciseThree = ({ onComplete }: ExerciseThreeProps) => {
         </p>
       )}
 
-      {rightSplit && isCorrect === null && (
+      {rightSplit && !showSumTask && isCorrect === null && (
         <div className="animate-scale-in">
           <p className="text-lg text-[#2F2E41] mb-6" style={{ fontFamily: 'DM Sans' }}>
-            Which two parts are the same size? Tap them! 👆
+            Pick any two parts! They're all the same size! 👆
           </p>
           <p className="text-sm text-[#2F2E41] opacity-75" style={{ fontFamily: 'DM Sans' }}>
             Selected: {selectedParts.length}/2
@@ -133,20 +130,35 @@ const ExerciseThree = ({ onComplete }: ExerciseThreeProps) => {
         </div>
       )}
 
-      {isCorrect === true && (
+      {showSumTask && (
+        <div className="animate-scale-in">
+          <p className="text-lg text-[#2F2E41] mb-6" style={{ fontFamily: 'DM Sans' }}>
+            How much is ¼ + ¼?
+          </p>
+          <FractionSelector
+            options={["1/2", "1/4", "1/3"]}
+            onSelect={handleSumSelect}
+            selectedFraction={selectedSum}
+            correctAnswer="1/2"
+            isCorrect={sumIsCorrect}
+          />
+        </div>
+      )}
+
+      {isCorrect === true && !showSumTask && (
         <div className="mt-6 animate-bounce">
-          <span className="text-4xl">🔨</span>
+          <span className="text-4xl">⭐</span>
           <p className="text-2xl font-bold text-[#FF6F00]" style={{ fontFamily: 'Space Grotesk' }}>
-            Excellent! ¼ + ¼ = ½ !
+            Great choice! All parts are ¼!
           </p>
         </div>
       )}
 
-      {isCorrect === false && (
-        <div className="mt-6">
-          <span className="text-2xl">❓</span>
-          <p className="text-lg text-[#2F2E41]" style={{ fontFamily: 'DM Sans' }}>
-            Try again! Look for pieces that are the same size.
+      {sumIsCorrect === true && (
+        <div className="mt-6 animate-bounce">
+          <span className="text-4xl">🔨</span>
+          <p className="text-2xl font-bold text-[#FF6F00]" style={{ fontFamily: 'Space Grotesk' }}>
+            Excellent! ¼ + ¼ = ½!
           </p>
         </div>
       )}

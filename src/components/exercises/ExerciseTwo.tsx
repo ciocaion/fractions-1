@@ -8,15 +8,16 @@ interface ExerciseTwoProps {
 }
 
 const ExerciseTwo = ({ onComplete }: ExerciseTwoProps) => {
-  const [leftSplit, setLeftSplit] = useState(false);
+  const [topSplit, setTopSplit] = useState(false);
   const [showSelector, setShowSelector] = useState(false);
   const [selectedFraction, setSelectedFraction] = useState<string | null>(null);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
-  const [showSnapTask, setShowSnapTask] = useState(false);
-  const [partsSnapped, setPartsSnapped] = useState(false);
+  const [showSumTask, setShowSumTask] = useState(false);
+  const [selectedSum, setSelectedSum] = useState<string | null>(null);
+  const [sumIsCorrect, setSumIsCorrect] = useState<boolean | null>(null);
 
-  const handleLeftSplit = () => {
-    setLeftSplit(true);
+  const handleTopSplit = () => {
+    setTopSplit(true);
     setTimeout(() => {
       setShowSelector(true);
     }, 1000);
@@ -29,16 +30,21 @@ const ExerciseTwo = ({ onComplete }: ExerciseTwoProps) => {
     
     if (correct) {
       setTimeout(() => {
-        setShowSnapTask(true);
+        setShowSumTask(true);
       }, 1500);
     }
   };
 
-  const handleSnapParts = () => {
-    setPartsSnapped(true);
-    setTimeout(() => {
-      onComplete();
-    }, 2000);
+  const handleSumSelect = (sum: string) => {
+    setSelectedSum(sum);
+    const correct = sum === "1/2";
+    setSumIsCorrect(correct);
+    
+    if (correct) {
+      setTimeout(() => {
+        onComplete();
+      }, 1500);
+    }
   };
 
   return (
@@ -48,53 +54,43 @@ const ExerciseTwo = ({ onComplete }: ExerciseTwoProps) => {
       </h2>
       
       <div className="flex justify-center mb-8">
-        <div className="flex">
-          {!leftSplit ? (
+        <div className="flex flex-col">
+          {!topSplit ? (
             <div
-              onClick={handleLeftSplit}
+              onClick={handleTopSplit}
               className={cn(
-                "w-24 h-48 bg-[#0826FF] rounded-l-lg cursor-pointer transition-all duration-300",
+                "w-48 h-24 bg-[#0826FF] rounded-t-lg cursor-pointer transition-all duration-300",
                 "hover:scale-105 hover:shadow-lg",
                 "border-2 border-dashed border-[#6F00FF] border-opacity-50 relative"
               )}
             >
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-1 h-full bg-[#6F00FF] opacity-50 animate-pulse" />
+                <div className="h-1 w-full bg-[#6F00FF] opacity-50 animate-pulse" />
               </div>
               <div className="absolute inset-0 flex items-center justify-center">
                 <span className="text-white text-xl">✂️</span>
               </div>
             </div>
           ) : (
-            <div className="flex animate-fade-in">
-              <div
-                className={cn(
-                  "w-12 h-48 bg-[#90EE90] rounded-l-lg transition-all duration-500",
-                  partsSnapped && "animate-pulse border-4 border-[#FF6F00]"
-                )}
-              />
-              <div
-                className={cn(
-                  "w-12 h-48 bg-[#FFD700] rounded-none transition-all duration-500",
-                  partsSnapped && "animate-pulse border-4 border-[#FF6F00]"
-                )}
-              />
+            <div className="flex flex-col animate-fade-in">
+              <div className="w-48 h-12 bg-[#90EE90] rounded-t-lg transition-all duration-500" />
+              <div className="w-48 h-12 bg-[#FFD700] rounded-none transition-all duration-500" />
             </div>
           )}
-          <div className="w-24 h-48 bg-[#2F2E41] rounded-r-lg" />
+          <div className="w-48 h-24 bg-[#2F2E41] rounded-b-lg" />
         </div>
       </div>
 
-      {!leftSplit && (
+      {!topSplit && (
         <p className="text-lg text-[#2F2E41] mb-4" style={{ fontFamily: 'DM Sans' }}>
-          Tap the left half to split it again! 🔄
+          Tap the top half to split it again! 🔄
         </p>
       )}
 
-      {showSelector && !showSnapTask && (
+      {showSelector && !showSumTask && (
         <div className="animate-scale-in">
           <p className="text-lg text-[#2F2E41] mb-6" style={{ fontFamily: 'DM Sans' }}>
-            What's the left piece now?
+            What's the top piece now?
           </p>
           <FractionSelector
             options={["1/4", "1/2", "1/8"]}
@@ -106,26 +102,22 @@ const ExerciseTwo = ({ onComplete }: ExerciseTwoProps) => {
         </div>
       )}
 
-      {showSnapTask && (
+      {showSumTask && (
         <div className="animate-scale-in">
           <p className="text-lg text-[#2F2E41] mb-6" style={{ fontFamily: 'DM Sans' }}>
-            Tap the two ¼ parts to combine them! 🔗
+            How much is ¼ + ¼?
           </p>
-          <button
-            onClick={handleSnapParts}
-            className={cn(
-              "px-8 py-4 bg-[#6F00FF] text-white rounded-full text-lg font-medium",
-              "hover:scale-105 transition-all duration-200",
-              "border-4 border-transparent hover:border-[#FF6F00]"
-            )}
-            style={{ fontFamily: 'DM Sans' }}
-          >
-            Combine Parts ➕
-          </button>
+          <FractionSelector
+            options={["1/2", "1/4", "1/8"]}
+            onSelect={handleSumSelect}
+            selectedFraction={selectedSum}
+            correctAnswer="1/2"
+            isCorrect={sumIsCorrect}
+          />
         </div>
       )}
 
-      {isCorrect === true && !showSnapTask && (
+      {isCorrect === true && !showSumTask && (
         <div className="mt-6 animate-bounce">
           <span className="text-4xl">⭐</span>
           <p className="text-2xl font-bold text-[#FF6F00]" style={{ fontFamily: 'Space Grotesk' }}>
@@ -134,11 +126,11 @@ const ExerciseTwo = ({ onComplete }: ExerciseTwoProps) => {
         </div>
       )}
 
-      {partsSnapped && (
+      {sumIsCorrect === true && (
         <div className="mt-6 animate-bounce">
           <span className="text-4xl">🎉</span>
           <p className="text-2xl font-bold text-[#FF6F00]" style={{ fontFamily: 'Space Grotesk' }}>
-            ¼ + ¼ = ½ !
+            Excellent! ¼ + ¼ = ½!
           </p>
         </div>
       )}
