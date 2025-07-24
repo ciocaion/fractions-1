@@ -73,7 +73,10 @@ const ExerciseTwo = ({ onComplete }: ExerciseTwoProps) => {
             </div>
           ) : (
             <div className="flex animate-fade-in rounded-t-lg overflow-hidden">
-              <div className="w-24 h-24 bg-[#90EE90] transition-all duration-500" />
+              <div className={cn(
+                "w-24 h-24 bg-[#90EE90] transition-all duration-500",
+                isCorrect === true && "border-4 border-[#FF6F00] animate-pulse"
+              )} />
               <div className="w-24 h-24 bg-[#FFD700] transition-all duration-500" />
             </div>
           )}
