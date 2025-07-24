@@ -78,7 +78,7 @@ const ExerciseFive = ({ onComplete }: ExerciseFiveProps) => {
           <div
             key={i}
             className={cn(
-              "w-96 h-24 border-b border-[#2F2E41] last:border-b-0 transition-all duration-500",
+              "w-48 h-24 border-b border-[#2F2E41] last:border-b-0 transition-all duration-500",
               i === currentPiece 
                 ? "bg-[#FF6F00] animate-pulse border-4 border-[#6F00FF]" 
                 : i < currentPiece 
@@ -109,7 +109,7 @@ const ExerciseFive = ({ onComplete }: ExerciseFiveProps) => {
           <div
             key={i}
             className={cn(
-              "w-48 h-24 border border-[#2F2E41] transition-all duration-500",
+              "w-24 h-24 border border-[#2F2E41] transition-all duration-500",
               i === currentPiece 
                 ? "bg-[#FF6F00] animate-pulse border-4 border-[#6F00FF]" 
                 : i < currentPiece 
@@ -140,7 +140,7 @@ const ExerciseFive = ({ onComplete }: ExerciseFiveProps) => {
           <div
             key={i}
             className={cn(
-              "w-24 h-24 border border-[#2F2E41] transition-all duration-500",
+              "w-12 h-12 border border-[#2F2E41] transition-all duration-500",
               i === currentPiece 
                 ? "bg-[#FF6F00] animate-pulse border-4 border-[#6F00FF]" 
                 : i < currentPiece 
@@ -149,7 +149,7 @@ const ExerciseFive = ({ onComplete }: ExerciseFiveProps) => {
             )}
           >
             {i === currentPiece && (
-              <div className="h-full flex items-center justify-center text-white font-bold text-lg">
+              <div className="h-full flex items-center justify-center text-white font-bold text-sm">
                 1/{selectedSplit}
               </div>
             )}
@@ -174,7 +174,7 @@ const ExerciseFive = ({ onComplete }: ExerciseFiveProps) => {
       
       <div className="flex justify-center mb-8">
         {!showResult ? (
-          <div className="w-96 h-48 bg-[#FF6F00] rounded-lg border-4 border-[#2F2E41]" />
+          <div className="w-48 h-48 bg-[#FF6F00] rounded-lg border-4 border-[#2F2E41]" />
         ) : (
           renderSplitResult()
         )}
