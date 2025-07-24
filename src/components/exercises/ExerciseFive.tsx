@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
@@ -78,7 +77,7 @@ const ExerciseFive = ({ onComplete }: ExerciseFiveProps) => {
           <div
             key={i}
             className={cn(
-              "w-48 h-24 border-b border-[#2F2E41] last:border-b-0 transition-all duration-500",
+              "w-24 h-24 border-b border-[#2F2E41] last:border-b-0 transition-all duration-500",
               i === currentPiece 
                 ? "bg-[#FF6F00] animate-pulse border-4 border-[#6F00FF]" 
                 : i < currentPiece 
