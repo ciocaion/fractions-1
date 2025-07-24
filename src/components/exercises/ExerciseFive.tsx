@@ -70,37 +70,100 @@ const ExerciseFive = ({ onComplete }: ExerciseFiveProps) => {
   const renderSplitResult = () => {
     if (!selectedSplit) return null;
 
-    const pieceSize = 192 / selectedSplit;
-    const pieces = [];
-    
-    for (let i = 0; i < selectedSplit; i++) {
-      pieces.push(
-        <div
-          key={i}
-          className={cn(
-            "h-48 border-r border-[#2F2E41] last:border-r-0 transition-all duration-500",
-            i === currentPiece 
-              ? "bg-[#FF6F00] animate-pulse border-4 border-[#6F00FF]" 
-              : i < currentPiece 
-              ? "bg-[#FFD700]" 
-              : "bg-[#0826FF]"
-          )}
-          style={{ width: `${pieceSize}px` }}
-        >
-          {i === currentPiece && (
-            <div className="h-full flex items-center justify-center text-white font-bold text-lg">
-              1/{selectedSplit}
-            </div>
-          )}
+    if (selectedSplit === 2) {
+      // Horizontal split for 2 pieces
+      const pieces = [];
+      for (let i = 0; i < 2; i++) {
+        pieces.push(
+          <div
+            key={i}
+            className={cn(
+              "w-96 h-24 border-b border-[#2F2E41] last:border-b-0 transition-all duration-500",
+              i === currentPiece 
+                ? "bg-[#FF6F00] animate-pulse border-4 border-[#6F00FF]" 
+                : i < currentPiece 
+                ? "bg-[#FFD700]" 
+                : "bg-[#0826FF]"
+            )}
+          >
+            {i === currentPiece && (
+              <div className="h-full flex items-center justify-center text-white font-bold text-lg">
+                1/{selectedSplit}
+              </div>
+            )}
+          </div>
+        );
+      }
+      return (
+        <div className="flex flex-col animate-fade-in border-2 border-[#2F2E41] rounded-lg overflow-hidden">
+          {pieces}
         </div>
       );
     }
 
-    return (
-      <div className="flex animate-fade-in border-2 border-[#2F2E41] rounded-lg overflow-hidden">
-        {pieces}
-      </div>
-    );
+    if (selectedSplit === 4) {
+      // 2x2 grid for 4 pieces
+      const pieces = [];
+      for (let i = 0; i < 4; i++) {
+        pieces.push(
+          <div
+            key={i}
+            className={cn(
+              "w-48 h-24 border border-[#2F2E41] transition-all duration-500",
+              i === currentPiece 
+                ? "bg-[#FF6F00] animate-pulse border-4 border-[#6F00FF]" 
+                : i < currentPiece 
+                ? "bg-[#FFD700]" 
+                : "bg-[#0826FF]"
+            )}
+          >
+            {i === currentPiece && (
+              <div className="h-full flex items-center justify-center text-white font-bold text-lg">
+                1/{selectedSplit}
+              </div>
+            )}
+          </div>
+        );
+      }
+      return (
+        <div className="grid grid-cols-2 animate-fade-in border-2 border-[#2F2E41] rounded-lg overflow-hidden">
+          {pieces}
+        </div>
+      );
+    }
+
+    if (selectedSplit === 8) {
+      // 2x4 grid for 8 pieces
+      const pieces = [];
+      for (let i = 0; i < 8; i++) {
+        pieces.push(
+          <div
+            key={i}
+            className={cn(
+              "w-24 h-24 border border-[#2F2E41] transition-all duration-500",
+              i === currentPiece 
+                ? "bg-[#FF6F00] animate-pulse border-4 border-[#6F00FF]" 
+                : i < currentPiece 
+                ? "bg-[#FFD700]" 
+                : "bg-[#0826FF]"
+            )}
+          >
+            {i === currentPiece && (
+              <div className="h-full flex items-center justify-center text-white font-bold text-lg">
+                1/{selectedSplit}
+              </div>
+            )}
+          </div>
+        );
+      }
+      return (
+        <div className="grid grid-cols-4 animate-fade-in border-2 border-[#2F2E41] rounded-lg overflow-hidden">
+          {pieces}
+        </div>
+      );
+    }
+
+    return null;
   };
 
   return (
@@ -111,7 +174,7 @@ const ExerciseFive = ({ onComplete }: ExerciseFiveProps) => {
       
       <div className="flex justify-center mb-8">
         {!showResult ? (
-          <div className="w-48 h-48 bg-[#FF6F00] rounded-lg border-4 border-[#2F2E41]" />
+          <div className="w-96 h-48 bg-[#FF6F00] rounded-lg border-4 border-[#2F2E41]" />
         ) : (
           renderSplitResult()
         )}
