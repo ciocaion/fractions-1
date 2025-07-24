@@ -65,16 +65,16 @@ const ExerciseTwo = ({ onComplete }: ExerciseTwoProps) => {
               )}
             >
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="h-1 w-full bg-[#6F00FF] opacity-50 animate-pulse" />
+                <div className="w-1 h-full bg-[#6F00FF] opacity-50 animate-pulse" />
               </div>
               <div className="absolute inset-0 flex items-center justify-center">
                 <span className="text-white text-xl">✂️</span>
               </div>
             </div>
           ) : (
-            <div className="flex flex-col animate-fade-in">
-              <div className="w-48 h-12 bg-[#90EE90] rounded-t-lg transition-all duration-500" />
-              <div className="w-48 h-12 bg-[#FFD700] rounded-none transition-all duration-500" />
+            <div className="flex animate-fade-in rounded-t-lg overflow-hidden">
+              <div className="w-24 h-24 bg-[#90EE90] transition-all duration-500" />
+              <div className="w-24 h-24 bg-[#FFD700] transition-all duration-500" />
             </div>
           )}
           <div className="w-48 h-24 bg-[#2F2E41] rounded-b-lg" />
