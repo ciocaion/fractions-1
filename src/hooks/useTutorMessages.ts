@@ -6,7 +6,7 @@ interface TutorMessage {
   type: 'tutorMessage';
   messageType: 'success' | 'instruction';
   content: string;
-  data: object;
+  data: Record<string, any>;
 }
 
 interface LanguageChangeMessage {
@@ -19,10 +19,10 @@ export const useTutorMessages = () => {
   const lastMessageRef = useRef<{
     messageType: 'success' | 'instruction';
     translationKey: string;
-    data?: object;
+    data?: Record<string, any>;
   } | null>(null);
 
-  const sendTutorMessage = (messageType: 'success' | 'instruction', translationKey: string, data: object = {}) => {
+  const sendTutorMessage = (messageType: 'success' | 'instruction', translationKey: string, data: Record<string, any> = {}) => {
     const content = t(translationKey, data);
     
     const message: TutorMessage = {
