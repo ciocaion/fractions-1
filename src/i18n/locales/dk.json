@@ -1,0 +1,61 @@
+
+{
+  "common": {
+    "encourage": "Du klarer det godt — fortsæt! 🌟",
+    "nudge": "Se godt efter og prøv igen. Du kan det! 💪"
+  },
+  "fraction_explorer": {
+    "title": "Brøk Opdager",
+    "subtitle": "Del Firkanten! 🟧",
+    "intro": "Velkommen til Brøk Opdager! Lad os lære om brøker ved at dele firkanter.",
+    
+    "ex1": {
+      "title": "Opgave 1: Del det Hele",
+      "split_instruction": "Tryk på firkanten for at dele den i to!",
+      "fraction_question": "Hvilken brøk har du lavet?",
+      "success": "Godt! Du lavede to halvdele!",
+      "try_again": "Prøv igen! Se på de to lige store dele."
+    },
+    
+    "ex2": {
+      "title": "Opgave 2: Del den Ene Halvdel",
+      "split_instruction": "Tryk på den øverste halvdel for at dele den igen!",
+      "fraction_question": "Hvad er det øverste stykke nu?",
+      "sum_question": "Hvor meget er ¼ + ¼?",
+      "success_piece": "Perfekt! Det er ¼!",
+      "success_sum": "Fremragende! ¼ + ¼ = ½!"
+    },
+    
+    "ex3": {
+      "title": "Opgave 3: Del en Anden Side",
+      "split_instruction": "Tryk på højre side for at dele den også!",
+      "select_instruction": "Vælg to vilkårlige dele! De er alle samme størrelse!",
+      "sum_question": "Hvor meget er ¼ + ¼?",
+      "success_selection": "Godt valg! Alle dele er ¼!",
+      "success_sum": "Fremragende! ¼ + ¼ = ½!"
+    },
+    
+    "ex4": {
+      "title": "Opgave 4: Byg fra Dele",
+      "instruction": "Træk de rigtige stykker for at fuldføre firkanten!",
+      "success": "Perfekt! ¼ + ¼ + ½ = 1 hel!"
+    },
+    
+    "ex5": {
+      "title": "Opgave 5: Forudsig Før Deling",
+      "choose_pieces": "Hvor mange stykker vil du lave?",
+      "predict_fraction": "Før vi deler, forudsig: Hvad bliver hvert stykke?",
+      "success_prediction": "God forudsigelse! Lad os se...",
+      "wrong_prediction": "Lad os se hvad der faktisk sker...",
+      "success_final": "Hvert stykke er {{fraction}}!",
+      "success_correct_prediction": "Din forudsigelse var korrekt!",
+      "success_wrong_prediction": "Du forudsagde {{predicted}}, men det er faktisk {{actual}}!"
+    },
+    
+    "completion": {
+      "title": "Du Byggede et Helt!",
+      "message": "Fantastisk arbejde! Du har mestret brøker!",
+      "play_again": "Spil Igen!"
+    }
+  }
+}

@@ -1,4 +1,5 @@
 
+import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 
 interface CompletionScreenProps {
@@ -6,6 +7,8 @@ interface CompletionScreenProps {
 }
 
 const CompletionScreen = ({ onReset }: CompletionScreenProps) => {
+  const { t } = useTranslation();
+
   return (
     <div className="text-center">
       <div className="mb-8 animate-bounce">
@@ -13,11 +16,11 @@ const CompletionScreen = ({ onReset }: CompletionScreenProps) => {
       </div>
       
       <h2 className="text-4xl font-bold text-[#FF6F00] mb-6" style={{ fontFamily: 'Space Grotesk' }}>
-        You Built a Whole!
+        {t('fraction_explorer.completion.title')}
       </h2>
       
       <p className="text-xl text-[#2F2E41] mb-8" style={{ fontFamily: 'DM Sans' }}>
-        Amazing work! You've mastered fractions! ⭐
+        {t('fraction_explorer.completion.message')} ⭐
       </p>
 
       {/* Visual summary of learned fractions */}
@@ -56,33 +59,18 @@ const CompletionScreen = ({ onReset }: CompletionScreenProps) => {
         </div>
       </div>
 
-      <div className="space-y-4">
-        <div className="bg-[#F0F0F0] rounded-2xl p-6 border-4 border-[#2F2E41]">
-          <h3 className="text-lg font-bold text-[#2F2E41] mb-2" style={{ fontFamily: 'Space Grotesk' }}>
-            You Learned:
-          </h3>
-          <ul className="text-[#2F2E41] space-y-1" style={{ fontFamily: 'DM Sans' }}>
-            <li>✅ How to split shapes into equal parts</li>
-            <li>✅ What fractions ½, ¼ look like</li>
-            <li>✅ How to combine fractions</li>
-            <li>✅ That ¼ + ¼ = ½</li>
-            <li>✅ How fractions make a whole!</li>
-          </ul>
-        </div>
-
-        <button
-          onClick={onReset}
-          className={cn(
-            "px-12 py-4 bg-[#6F00FF] text-white rounded-full text-xl font-bold",
-            "hover:scale-105 transition-all duration-300",
-            "border-4 border-transparent hover:border-[#FF6F00]",
-            "shadow-lg hover:shadow-xl"
-          )}
-          style={{ fontFamily: 'Space Grotesk' }}
-        >
-          Play Again! 🔄
-        </button>
-      </div>
+      <button
+        onClick={onReset}
+        className={cn(
+          "px-12 py-4 bg-[#6F00FF] text-white rounded-full text-xl font-bold",
+          "hover:scale-105 transition-all duration-300",
+          "border-4 border-transparent hover:border-[#FF6F00]",
+          "shadow-lg hover:shadow-xl"
+        )}
+        style={{ fontFamily: 'Space Grotesk' }}
+      >
+        {t('fraction_explorer.completion.play_again')} 🔄
+      </button>
     </div>
   );
 };
