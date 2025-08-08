@@ -1,0 +1,72 @@
+
+{
+  "app": {
+    "title": "Fraction Explorer",
+    "subtitle": "Split the Square! 🟧"
+  },
+  "exercises": {
+    "exercise1": {
+      "title": "Exercise 1: Split the Whole",
+      "tapToSplit": "Tap the square to split it in half! ✨",
+      "whatFraction": "What fraction did you create?",
+      "success": "Nice! You made two halves!",
+      "tryAgain": "Try again! Look at the two equal parts."
+    },
+    "exercise2": {
+      "title": "Exercise 2: Split One Half",
+      "tapToSplitHalf": "Tap the top half to split it again! 🔄",
+      "whatIsTopPiece": "What's the top piece now?",
+      "howMuchSum": "How much is ¼ + ¼?",
+      "perfectQuarter": "Perfect! That's ¼!",
+      "excellentSum": "Excellent! ¼ + ¼ = ½!"
+    },
+    "exercise3": {
+      "title": "Exercise 3: Split Another Side",
+      "tapRightSide": "Tap the right side to split it too! 🔄",
+      "pickAnyTwo": "Pick any two parts! They're all the same size! 👆",
+      "selected": "Selected: {{count}}/2",
+      "greatChoice": "Great choice! All parts are ¼!",
+      "excellentSum": "Excellent! ¼ + ¼ = ½!"
+    },
+    "exercise4": {
+      "title": "Exercise 4: Build from Parts",
+      "dragPieces": "Drag the correct pieces to complete the square! 🧩",
+      "perfectWhole": "Perfect! ¼ + ¼ + ½ = 1 whole!"
+    },
+    "exercise5": {
+      "title": "Exercise 5: Predict Before Splitting",
+      "howManyPieces": "How many pieces do you want to make? 🤔",
+      "predictBefore": "🤔 Before we split, predict: What will each piece be?",
+      "greatPrediction": "🎉 Great prediction! Let's see...",
+      "letsSeeWhat": "🤔 Let's see what actually happens...",
+      "eachPieceIs": "Each piece is {{fraction}}!",
+      "predictionCorrect": "🎉 Your prediction was correct!",
+      "predictionIncorrect": "💡 You predicted {{predicted}}, but it's actually {{actual}}!",
+      "splitOptions": {
+        "split2": "Split into 2",
+        "split4": "Split into 4",
+        "split8": "Split into 8"
+      }
+    }
+  },
+  "completion": {
+    "title": "You Built a Whole!",
+    "subtitle": "Amazing work! You've mastered fractions! ⭐",
+    "youLearned": "You Learned:",
+    "skills": [
+      "How to split shapes into equal parts",
+      "What fractions ½, ¼ look like",
+      "How to combine fractions",
+      "That ¼ + ¼ = ½",
+      "How fractions make a whole!"
+    ],
+    "playAgain": "Play Again! 🔄"
+  },
+  "messages": {
+    "exerciseStarted": "Starting {{exerciseName}}. Let's learn about fractions!",
+    "exerciseCompleted": "Great job! You completed {{exerciseName}}!",
+    "correctAnswer": "Correct! {{feedback}}",
+    "incorrectAnswer": "Not quite right. {{hint}}",
+    "gameCompleted": "Congratulations! You've mastered all fraction exercises!"
+  }
+}
