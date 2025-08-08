@@ -1,5 +1,7 @@
 
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useTutorMessage } from "@/hooks/useTutorMessage";
 import { cn } from "@/lib/utils";
 
 interface ExerciseFourProps {
@@ -7,6 +9,8 @@ interface ExerciseFourProps {
 }
 
 const ExerciseFour = ({ onComplete }: ExerciseFourProps) => {
+  const { t } = useTranslation();
+  const { sendMessage } = useTutorMessage();
   const [droppedPieces, setDroppedPieces] = useState<{ [key: number]: string }>({});
   const [availablePieces] = useState(["1/4", "1/4", "1/2", "1/3"]);
   const [usedPieces, setUsedPieces] = useState<number[]>([]);
@@ -42,25 +46,26 @@ const ExerciseFour = ({ onComplete }: ExerciseFourProps) => {
     
     if (!zone || usedPieces.includes(pieceIndex)) return;
     
-    // Check if piece fits in zone
     const fits = zone.correctPiece === piece;
     
     if (fits) {
       setDroppedPieces(prev => ({ ...prev, [zoneId]: piece }));
       setUsedPieces(prev => [...prev, pieceIndex]);
       
-      // Check if puzzle is complete
       const allCorrectPieces = dropZones.every(z => 
         droppedPieces[z.id] === z.correctPiece || 
         (z.id === zoneId && piece === z.correctPiece)
       );
       
-      if (allCorrectPieces && usedPieces.length === 2) { // Only need 3 pieces total (2 quarters + 1 half)
+      if (allCorrectPieces && usedPieces.length === 2) {
         setIsComplete(true);
+        sendMessage('success', 'fraction_explorer.ex4_build_from_parts.success');
         setTimeout(() => {
           onComplete();
         }, 2000);
       }
+    } else {
+      sendMessage('instruction', 'fraction_explorer.ex4_build_from_parts.incorrect');
     }
   };
 
@@ -76,10 +81,9 @@ const ExerciseFour = ({ onComplete }: ExerciseFourProps) => {
   return (
     <div className="text-center">
       <h2 className="text-3xl font-bold text-[#2F2E41] mb-8" style={{ fontFamily: 'Space Grotesk' }}>
-        Exercise 4: Build from Parts
+        {t('fraction_explorer.ex4_build_from_parts.title')}
       </h2>
       
-      {/* Drop zones - the square frame */}
       <div className="flex justify-center mb-8">
         <div className="grid grid-cols-2 gap-1 p-4 border-4 border-dashed border-[#2F2E41] rounded-lg">
           {dropZones.map((zone) => (
@@ -109,12 +113,8 @@ const ExerciseFour = ({ onComplete }: ExerciseFourProps) => {
         </div>
       </div>
 
-      {/* Available pieces */}
       {!isComplete && (
         <div className="animate-scale-in">
-          <p className="text-lg text-[#2F2E41] mb-6" style={{ fontFamily: 'DM Sans' }}>
-            Drag the correct pieces to complete the square! 🧩
-          </p>
           <div className="flex justify-center space-x-4">
             {availablePieces.map((piece, index) => (
               <div
@@ -140,15 +140,6 @@ const ExerciseFour = ({ onComplete }: ExerciseFourProps) => {
               </div>
             ))}
           </div>
-        </div>
-      )}
-
-      {isComplete && (
-        <div className="mt-6 animate-bounce">
-          <span className="text-4xl">🎉</span>
-          <p className="text-2xl font-bold text-[#FF6F00]" style={{ fontFamily: 'Space Grotesk' }}>
-            Perfect! ¼ + ¼ + ½ = 1 whole!
-          </p>
         </div>
       )}
     </div>

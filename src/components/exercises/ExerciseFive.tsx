@@ -1,4 +1,7 @@
+
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useTutorMessage } from "@/hooks/useTutorMessage";
 import { cn } from "@/lib/utils";
 
 interface ExerciseFiveProps {
@@ -6,6 +9,8 @@ interface ExerciseFiveProps {
 }
 
 const ExerciseFive = ({ onComplete }: ExerciseFiveProps) => {
+  const { t } = useTranslation();
+  const { sendMessage } = useTutorMessage();
   const [selectedSplit, setSelectedSplit] = useState<number | null>(null);
   const [showPrediction, setShowPrediction] = useState(false);
   const [predictedFraction, setPredictedFraction] = useState<string | null>(null);
@@ -24,6 +29,7 @@ const ExerciseFive = ({ onComplete }: ExerciseFiveProps) => {
   const handleSplitSelect = (pieces: number) => {
     setSelectedSplit(pieces);
     setShowPrediction(true);
+    sendMessage('instruction', 'fraction_explorer.ex5_predict_before.prompt_predict_fraction');
   };
 
   const handlePredictionSelect = (fraction: string) => {
@@ -47,6 +53,12 @@ const ExerciseFive = ({ onComplete }: ExerciseFiveProps) => {
         clearInterval(interval);
         setTimeout(() => {
           setShowComparison(true);
+          const isCorrect = isPredictionCorrect();
+          if (isCorrect) {
+            sendMessage('success', 'fraction_explorer.ex5_predict_before.success_prediction');
+          } else {
+            sendMessage('instruction', 'fraction_explorer.ex5_predict_before.incorrect_prediction');
+          }
           setTimeout(() => {
             onComplete();
           }, 3000);
@@ -70,14 +82,13 @@ const ExerciseFive = ({ onComplete }: ExerciseFiveProps) => {
     if (!selectedSplit) return null;
 
     if (selectedSplit === 2) {
-      // Horizontal split for 2 pieces
       const pieces = [];
       for (let i = 0; i < 2; i++) {
         pieces.push(
           <div
             key={i}
             className={cn(
-              "w-24 h-24 border-b border-[#2F2E41] last:border-b-0 transition-all duration-500",
+              "w-48 h-24 border-b border-[#2F2E41] last:border-b-0 transition-all duration-500",
               i === currentPiece 
                 ? "bg-[#FF6F00] animate-pulse border-4 border-[#6F00FF]" 
                 : i < currentPiece 
@@ -101,7 +112,6 @@ const ExerciseFive = ({ onComplete }: ExerciseFiveProps) => {
     }
 
     if (selectedSplit === 4) {
-      // 2x2 grid for 4 pieces
       const pieces = [];
       for (let i = 0; i < 4; i++) {
         pieces.push(
@@ -132,7 +142,6 @@ const ExerciseFive = ({ onComplete }: ExerciseFiveProps) => {
     }
 
     if (selectedSplit === 8) {
-      // 2x4 grid for 8 pieces
       const pieces = [];
       for (let i = 0; i < 8; i++) {
         pieces.push(
@@ -168,7 +177,7 @@ const ExerciseFive = ({ onComplete }: ExerciseFiveProps) => {
   return (
     <div className="text-center">
       <h2 className="text-3xl font-bold text-[#2F2E41] mb-8" style={{ fontFamily: 'Space Grotesk' }}>
-        Exercise 5: Predict Before Splitting
+        {t('fraction_explorer.ex5_predict_before.title')}
       </h2>
       
       <div className="flex justify-center mb-8">
@@ -181,9 +190,6 @@ const ExerciseFive = ({ onComplete }: ExerciseFiveProps) => {
 
       {!showPrediction && (
         <div className="animate-scale-in">
-          <p className="text-lg text-[#2F2E41] mb-8" style={{ fontFamily: 'DM Sans' }}>
-            How many pieces do you want to make? 🤔
-          </p>
           <div className="flex justify-center space-x-4">
             {splitOptions.map((option) => (
               <button
@@ -207,9 +213,6 @@ const ExerciseFive = ({ onComplete }: ExerciseFiveProps) => {
 
       {showPrediction && !showResult && (
         <div className="animate-scale-in">
-          <p className="text-lg text-[#2F2E41] mb-6" style={{ fontFamily: 'DM Sans' }}>
-            🤔 Before we split, predict: What will each piece be?
-          </p>
           <div className="flex justify-center space-x-4 mb-4">
             {fractionOptions.map((fraction) => (
               <button
@@ -231,35 +234,6 @@ const ExerciseFive = ({ onComplete }: ExerciseFiveProps) => {
                 {fraction}
               </button>
             ))}
-          </div>
-          {predictedFraction && (
-            <p className="text-lg font-medium" style={{ fontFamily: 'DM Sans' }}>
-              {isPredictionCorrect() ? (
-                <span className="text-green-600">🎉 Great prediction! Let's see...</span>
-              ) : (
-                <span className="text-red-600">🤔 Let's see what actually happens...</span>
-              )}
-            </p>
-          )}
-        </div>
-      )}
-
-      {showComparison && (
-        <div className="mt-6 animate-bounce">
-          <span className="text-4xl">⭐</span>
-          <div className="mt-4">
-            <p className="text-xl font-bold text-[#2F2E41] mb-2" style={{ fontFamily: 'Space Grotesk' }}>
-              Each piece is {getCorrectFraction()}!
-            </p>
-            {isPredictionCorrect() ? (
-              <p className="text-lg text-green-600 font-medium" style={{ fontFamily: 'DM Sans' }}>
-                🎉 Your prediction was correct!
-              </p>
-            ) : (
-              <p className="text-lg text-[#FF6F00] font-medium" style={{ fontFamily: 'DM Sans' }}>
-                💡 You predicted {predictedFraction}, but it's actually {getCorrectFraction()}!
-              </p>
-            )}
           </div>
         </div>
       )}
