@@ -1,6 +1,7 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
+import { useTutorMessages } from "../../hooks/useTutorMessages";
 
 interface ExerciseFourProps {
   onComplete: () => void;
@@ -12,12 +13,19 @@ const ExerciseFour = ({ onComplete }: ExerciseFourProps) => {
   const [usedPieces, setUsedPieces] = useState<number[]>([]);
   const [isComplete, setIsComplete] = useState(false);
   const [draggedPiece, setDraggedPiece] = useState<number | null>(null);
+  const { sendTutorMessage } = useTutorMessages();
 
   const dropZones = [
     { id: 0, correctPiece: "1/4", color: "#90EE90" },
     { id: 1, correctPiece: "1/4", color: "#FFD700" },
     { id: 2, correctPiece: "1/2", color: "#FF69B4", isDouble: true },
   ];
+
+  useEffect(() => {
+    // Send initial instruction when component mounts
+    sendTutorMessage('instruction', 'messages.fraction_explorer.ex4_build_from_parts.intro');
+    sendTutorMessage('instruction', 'messages.fraction_explorer.ex4_build_from_parts.prompt');
+  }, [sendTutorMessage]);
 
   const handleDragStart = (e: React.DragEvent, pieceIndex: number) => {
     if (usedPieces.includes(pieceIndex)) return;
@@ -57,10 +65,13 @@ const ExerciseFour = ({ onComplete }: ExerciseFourProps) => {
       
       if (allCorrectPieces && usedPieces.length === 2) { // Only need 3 pieces total (2 quarters + 1 half)
         setIsComplete(true);
+        sendTutorMessage('success', 'messages.fraction_explorer.ex4_build_from_parts.success');
         setTimeout(() => {
           onComplete();
         }, 2000);
       }
+    } else {
+      sendTutorMessage('instruction', 'messages.fraction_explorer.ex4_build_from_parts.incorrect');
     }
   };
 
@@ -112,9 +123,6 @@ const ExerciseFour = ({ onComplete }: ExerciseFourProps) => {
       {/* Available pieces */}
       {!isComplete && (
         <div className="animate-scale-in">
-          <p className="text-lg text-[#2F2E41] mb-6" style={{ fontFamily: 'DM Sans' }}>
-            Drag the correct pieces to complete the square! 🧩
-          </p>
           <div className="flex justify-center space-x-4">
             {availablePieces.map((piece, index) => (
               <div
@@ -146,9 +154,6 @@ const ExerciseFour = ({ onComplete }: ExerciseFourProps) => {
       {isComplete && (
         <div className="mt-6 animate-bounce">
           <span className="text-4xl">🎉</span>
-          <p className="text-2xl font-bold text-[#FF6F00]" style={{ fontFamily: 'Space Grotesk' }}>
-            Perfect! ¼ + ¼ + ½ = 1 whole!
-          </p>
         </div>
       )}
     </div>

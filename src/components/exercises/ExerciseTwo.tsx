@@ -1,7 +1,8 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import FractionSelector from "../FractionSelector";
+import { useTutorMessages } from "../../hooks/useTutorMessages";
 
 interface ExerciseTwoProps {
   onComplete: () => void;
@@ -15,11 +16,19 @@ const ExerciseTwo = ({ onComplete }: ExerciseTwoProps) => {
   const [showSumTask, setShowSumTask] = useState(false);
   const [selectedSum, setSelectedSum] = useState<string | null>(null);
   const [sumIsCorrect, setSumIsCorrect] = useState<boolean | null>(null);
+  const { sendTutorMessage } = useTutorMessages();
+
+  useEffect(() => {
+    // Send initial instruction when component mounts
+    sendTutorMessage('instruction', 'messages.fraction_explorer.ex2_split_one_half.intro');
+    sendTutorMessage('instruction', 'messages.fraction_explorer.ex2_split_one_half.prompt_split_top');
+  }, [sendTutorMessage]);
 
   const handleTopSplit = () => {
     setTopSplit(true);
     setTimeout(() => {
       setShowSelector(true);
+      sendTutorMessage('instruction', 'messages.fraction_explorer.ex2_split_one_half.after_split_prompt');
     }, 1000);
   };
 
@@ -29,9 +38,13 @@ const ExerciseTwo = ({ onComplete }: ExerciseTwoProps) => {
     setIsCorrect(correct);
     
     if (correct) {
+      sendTutorMessage('success', 'messages.fraction_explorer.ex2_split_one_half.success_top_piece');
       setTimeout(() => {
         setShowSumTask(true);
+        sendTutorMessage('instruction', 'messages.fraction_explorer.ex2_split_one_half.sum_prompt');
       }, 1500);
+    } else {
+      sendTutorMessage('instruction', 'messages.fraction_explorer.ex2_split_one_half.incorrect_top_piece');
     }
   };
 
@@ -41,9 +54,12 @@ const ExerciseTwo = ({ onComplete }: ExerciseTwoProps) => {
     setSumIsCorrect(correct);
     
     if (correct) {
+      sendTutorMessage('success', 'messages.fraction_explorer.ex2_split_one_half.sum_success');
       setTimeout(() => {
         onComplete();
       }, 1500);
+    } else {
+      sendTutorMessage('instruction', 'messages.fraction_explorer.ex2_split_one_half.sum_incorrect');
     }
   };
 
@@ -88,17 +104,8 @@ const ExerciseTwo = ({ onComplete }: ExerciseTwoProps) => {
         </div>
       </div>
 
-      {!topSplit && (
-        <p className="text-lg text-[#2F2E41] mb-4" style={{ fontFamily: 'DM Sans' }}>
-          Tap the top half to split it again! 🔄
-        </p>
-      )}
-
       {showSelector && !showSumTask && (
         <div className="animate-scale-in">
-          <p className="text-lg text-[#2F2E41] mb-6" style={{ fontFamily: 'DM Sans' }}>
-            What's the top piece now?
-          </p>
           <FractionSelector
             options={["1/4", "1/2", "1/8"]}
             onSelect={handleFractionSelect}
@@ -111,9 +118,6 @@ const ExerciseTwo = ({ onComplete }: ExerciseTwoProps) => {
 
       {showSumTask && (
         <div className="animate-scale-in">
-          <p className="text-lg text-[#2F2E41] mb-6" style={{ fontFamily: 'DM Sans' }}>
-            How much is ¼ + ¼?
-          </p>
           <FractionSelector
             options={["1/2", "1/4", "1/8"]}
             onSelect={handleSumSelect}
@@ -127,18 +131,12 @@ const ExerciseTwo = ({ onComplete }: ExerciseTwoProps) => {
       {isCorrect === true && !showSumTask && (
         <div className="mt-6 animate-bounce">
           <span className="text-4xl">⭐</span>
-          <p className="text-2xl font-bold text-[#FF6F00]" style={{ fontFamily: 'Space Grotesk' }}>
-            Perfect! That's ¼!
-          </p>
         </div>
       )}
 
       {sumIsCorrect === true && (
         <div className="mt-6 animate-bounce">
           <span className="text-4xl">🎉</span>
-          <p className="text-2xl font-bold text-[#FF6F00]" style={{ fontFamily: 'Space Grotesk' }}>
-            Excellent! ¼ + ¼ = ½!
-          </p>
         </div>
       )}
     </div>
