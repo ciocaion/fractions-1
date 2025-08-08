@@ -1,7 +1,8 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import FractionSelector from "../FractionSelector";
+import { useTutorMessages } from "@/hooks/useTutorMessages";
 
 interface ExerciseThreeProps {
   onComplete: () => void;
@@ -14,9 +15,20 @@ const ExerciseThree = ({ onComplete }: ExerciseThreeProps) => {
   const [showSumTask, setShowSumTask] = useState(false);
   const [selectedSum, setSelectedSum] = useState<string | null>(null);
   const [sumIsCorrect, setSumIsCorrect] = useState<boolean | null>(null);
+  const { sendTutorMessage } = useTutorMessages();
+
+  useEffect(() => {
+    sendTutorMessage('instruction', 'fraction_explorer.ex3_split_another_side.intro');
+    setTimeout(() => {
+      sendTutorMessage('instruction', 'fraction_explorer.ex3_split_another_side.prompt_split_other');
+    }, 1000);
+  }, [sendTutorMessage]);
 
   const handleRightSplit = () => {
     setRightSplit(true);
+    setTimeout(() => {
+      sendTutorMessage('instruction', 'fraction_explorer.ex3_split_another_side.after_split_prompt');
+    }, 500);
   };
 
   const handlePartSelect = (partIndex: number) => {
@@ -31,6 +43,7 @@ const ExerciseThree = ({ onComplete }: ExerciseThreeProps) => {
         setIsCorrect(true);
         setTimeout(() => {
           setShowSumTask(true);
+          sendTutorMessage('instruction', 'fraction_explorer.ex3_split_another_side.after_split_prompt');
         }, 1500);
       }
     }
@@ -42,18 +55,17 @@ const ExerciseThree = ({ onComplete }: ExerciseThreeProps) => {
     setSumIsCorrect(correct);
     
     if (correct) {
+      sendTutorMessage('success', 'fraction_explorer.ex3_split_another_side.success');
       setTimeout(() => {
         onComplete();
       }, 1500);
+    } else {
+      sendTutorMessage('instruction', 'fraction_explorer.ex3_split_another_side.incorrect');
     }
   };
 
   return (
     <div className="text-center">
-      <h2 className="text-3xl font-bold text-[#2F2E41] mb-8" style={{ fontFamily: 'Space Grotesk' }}>
-        Exercise 3: Split Another Side
-      </h2>
-      
       <div className="flex justify-center mb-8">
         <div className="grid grid-cols-2 gap-1">
           {/* Left side - already split */}
@@ -113,28 +125,8 @@ const ExerciseThree = ({ onComplete }: ExerciseThreeProps) => {
         </div>
       </div>
 
-      {!rightSplit && (
-        <p className="text-lg text-[#2F2E41] mb-4" style={{ fontFamily: 'DM Sans' }}>
-          Tap the right side to split it too! 🔄
-        </p>
-      )}
-
-      {rightSplit && !showSumTask && isCorrect === null && (
-        <div className="animate-scale-in">
-          <p className="text-lg text-[#2F2E41] mb-6" style={{ fontFamily: 'DM Sans' }}>
-            Pick any two parts! They're all the same size! 👆
-          </p>
-          <p className="text-sm text-[#2F2E41] opacity-75" style={{ fontFamily: 'DM Sans' }}>
-            Selected: {selectedParts.length}/2
-          </p>
-        </div>
-      )}
-
       {showSumTask && (
         <div className="animate-scale-in">
-          <p className="text-lg text-[#2F2E41] mb-6" style={{ fontFamily: 'DM Sans' }}>
-            How much is ¼ + ¼?
-          </p>
           <FractionSelector
             options={["1/2", "1/4", "1/3"]}
             onSelect={handleSumSelect}
@@ -148,18 +140,12 @@ const ExerciseThree = ({ onComplete }: ExerciseThreeProps) => {
       {isCorrect === true && !showSumTask && (
         <div className="mt-6 animate-bounce">
           <span className="text-4xl">⭐</span>
-          <p className="text-2xl font-bold text-[#FF6F00]" style={{ fontFamily: 'Space Grotesk' }}>
-            Great choice! All parts are ¼!
-          </p>
         </div>
       )}
 
       {sumIsCorrect === true && (
         <div className="mt-6 animate-bounce">
           <span className="text-4xl">🔨</span>
-          <p className="text-2xl font-bold text-[#FF6F00]" style={{ fontFamily: 'Space Grotesk' }}>
-            Excellent! ¼ + ¼ = ½!
-          </p>
         </div>
       )}
     </div>
