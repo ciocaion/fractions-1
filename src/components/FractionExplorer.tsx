@@ -1,7 +1,5 @@
 
-import { useState, useEffect } from "react";
-import { useTranslation } from "react-i18next";
-import { useTutorMessage } from "@/hooks/useTutorMessage";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 import ExerciseOne from "./exercises/ExerciseOne";
 import ExerciseTwo from "./exercises/ExerciseTwo";
@@ -12,15 +10,8 @@ import CompletionScreen from "./CompletionScreen";
 import ProgressDots from "./ProgressDots";
 
 const FractionExplorer = () => {
-  const { t } = useTranslation();
-  const { sendMessage } = useTutorMessage();
   const [currentExercise, setCurrentExercise] = useState(1);
   const [completedExercises, setCompletedExercises] = useState<number[]>([]);
-
-  // Send intro message when component mounts
-  useEffect(() => {
-    sendMessage('instruction', 'fraction_explorer.intro');
-  }, [sendMessage]);
 
   const completeExercise = (exerciseNumber: number) => {
     if (!completedExercises.includes(exerciseNumber)) {
@@ -30,11 +21,10 @@ const FractionExplorer = () => {
     if (exerciseNumber < 5) {
       setTimeout(() => {
         setCurrentExercise(exerciseNumber + 1);
-      }, 2000);
+      }, 2000); // Show success feedback before moving on
     } else {
       setTimeout(() => {
-        setCurrentExercise(6);
-        sendMessage('success', 'fraction_explorer.ex5_predict_before.wrap_up');
+        setCurrentExercise(6); // Show completion screen
       }, 2000);
     }
   };
@@ -42,7 +32,6 @@ const FractionExplorer = () => {
   const resetGame = () => {
     setCurrentExercise(1);
     setCompletedExercises([]);
-    sendMessage('instruction', 'fraction_explorer.intro');
   };
 
   return (
@@ -50,10 +39,10 @@ const FractionExplorer = () => {
       <div className="bg-white rounded-[50px] border-l-[10px] border-b-[10px] border-[#2F2E41] p-8 shadow-lg">
         <div className="text-center mb-8">
           <h1 className="font-bold text-5xl md:text-6xl text-[#2F2E41] mb-4" style={{ fontFamily: 'Space Grotesk' }}>
-            {t('fraction_explorer.title')}
+            Fraction Explorer
           </h1>
           <p className="text-xl text-[#2F2E41] font-medium" style={{ fontFamily: 'DM Sans' }}>
-            {t('fraction_explorer.subtitle')}
+            Split the Square! 🟧
           </p>
         </div>
 
