@@ -23,7 +23,7 @@ export const useTutorMessages = () => {
   } | null>(null);
 
   const sendTutorMessage = (messageType: 'success' | 'instruction', translationKey: string, data: Record<string, any> = {}) => {
-    const content = t(translationKey, data);
+    const content = t(translationKey, data) as string;
     
     const message: TutorMessage = {
       type: 'tutorMessage',
