@@ -50,10 +50,10 @@ const FractionExplorer = () => {
       <div className="bg-white rounded-[50px] border-l-[10px] border-b-[10px] border-[#2F2E41] p-8 shadow-lg">
         <div className="text-center mb-8">
           <h1 className="font-bold text-5xl md:text-6xl text-[#2F2E41] mb-4" style={{ fontFamily: 'Space Grotesk' }}>
-            {t('fraction_explorer.title')}
+            {t('title')}
           </h1>
           <p className="text-xl text-[#2F2E41] font-medium" style={{ fontFamily: 'DM Sans' }}>
-            {t('fraction_explorer.subtitle')}
+            {t('subtitle')}
           </p>
         </div>
 
