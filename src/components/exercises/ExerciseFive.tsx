@@ -1,7 +1,5 @@
-
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { useTutorMessages } from "@/hooks/useTutorMessages";
 
 interface ExerciseFiveProps {
   onComplete: () => void;
@@ -14,7 +12,6 @@ const ExerciseFive = ({ onComplete }: ExerciseFiveProps) => {
   const [showResult, setShowResult] = useState(false);
   const [currentPiece, setCurrentPiece] = useState(0);
   const [showComparison, setShowComparison] = useState(false);
-  const { sendTutorMessage } = useTutorMessages();
 
   const splitOptions = [
     { pieces: 2, label: "Split into 2", icon: "🔄" },
@@ -24,28 +21,13 @@ const ExerciseFive = ({ onComplete }: ExerciseFiveProps) => {
 
   const fractionOptions = ["1/2", "1/4", "1/8"];
 
-  useEffect(() => {
-    sendTutorMessage('instruction', 'fraction_explorer.ex5_predict_before.intro');
-    setTimeout(() => {
-      sendTutorMessage('instruction', 'fraction_explorer.ex5_predict_before.prompt_predict_pieces');
-    }, 1000);
-  }, [sendTutorMessage]);
-
   const handleSplitSelect = (pieces: number) => {
     setSelectedSplit(pieces);
     setShowPrediction(true);
-    sendTutorMessage('instruction', 'fraction_explorer.ex5_predict_before.prompt_predict_fraction');
   };
 
   const handlePredictionSelect = (fraction: string) => {
     setPredictedFraction(fraction);
-    
-    const correct = isPredictionCorrect(fraction);
-    if (correct) {
-      sendTutorMessage('success', 'fraction_explorer.ex5_predict_before.success_prediction');
-    } else {
-      sendTutorMessage('instruction', 'fraction_explorer.ex5_predict_before.incorrect_prediction');
-    }
     
     setTimeout(() => {
       setShowResult(true);
@@ -65,14 +47,7 @@ const ExerciseFive = ({ onComplete }: ExerciseFiveProps) => {
         clearInterval(interval);
         setTimeout(() => {
           setShowComparison(true);
-          const wasCorrect = isPredictionCorrect();
-          if (wasCorrect) {
-            sendTutorMessage('success', 'fraction_explorer.ex5_predict_before.success_split');
-          } else {
-            sendTutorMessage('instruction', 'fraction_explorer.ex5_predict_before.incorrect_split');
-          }
           setTimeout(() => {
-            sendTutorMessage('success', 'fraction_explorer.ex5_predict_before.wrap_up');
             onComplete();
           }, 3000);
         }, 1000);
@@ -87,15 +62,15 @@ const ExerciseFive = ({ onComplete }: ExerciseFiveProps) => {
     return "";
   };
 
-  const isPredictionCorrect = (fraction?: string) => {
-    const predicted = fraction || predictedFraction;
-    return predicted === getCorrectFraction();
+  const isPredictionCorrect = () => {
+    return predictedFraction === getCorrectFraction();
   };
 
   const renderSplitResult = () => {
     if (!selectedSplit) return null;
 
     if (selectedSplit === 2) {
+      // Horizontal split for 2 pieces
       const pieces = [];
       for (let i = 0; i < 2; i++) {
         pieces.push(
@@ -126,6 +101,7 @@ const ExerciseFive = ({ onComplete }: ExerciseFiveProps) => {
     }
 
     if (selectedSplit === 4) {
+      // 2x2 grid for 4 pieces
       const pieces = [];
       for (let i = 0; i < 4; i++) {
         pieces.push(
@@ -156,6 +132,7 @@ const ExerciseFive = ({ onComplete }: ExerciseFiveProps) => {
     }
 
     if (selectedSplit === 8) {
+      // 2x4 grid for 8 pieces
       const pieces = [];
       for (let i = 0; i < 8; i++) {
         pieces.push(
@@ -190,6 +167,10 @@ const ExerciseFive = ({ onComplete }: ExerciseFiveProps) => {
 
   return (
     <div className="text-center">
+      <h2 className="text-3xl font-bold text-[#2F2E41] mb-8" style={{ fontFamily: 'Space Grotesk' }}>
+        Exercise 5: Predict Before Splitting
+      </h2>
+      
       <div className="flex justify-center mb-8">
         {!showResult ? (
           <div className="w-48 h-48 bg-[#FF6F00] rounded-lg border-4 border-[#2F2E41]" />
@@ -200,6 +181,9 @@ const ExerciseFive = ({ onComplete }: ExerciseFiveProps) => {
 
       {!showPrediction && (
         <div className="animate-scale-in">
+          <p className="text-lg text-[#2F2E41] mb-8" style={{ fontFamily: 'DM Sans' }}>
+            How many pieces do you want to make? 🤔
+          </p>
           <div className="flex justify-center space-x-4">
             {splitOptions.map((option) => (
               <button
@@ -223,6 +207,9 @@ const ExerciseFive = ({ onComplete }: ExerciseFiveProps) => {
 
       {showPrediction && !showResult && (
         <div className="animate-scale-in">
+          <p className="text-lg text-[#2F2E41] mb-6" style={{ fontFamily: 'DM Sans' }}>
+            🤔 Before we split, predict: What will each piece be?
+          </p>
           <div className="flex justify-center space-x-4 mb-4">
             {fractionOptions.map((fraction) => (
               <button
@@ -245,12 +232,35 @@ const ExerciseFive = ({ onComplete }: ExerciseFiveProps) => {
               </button>
             ))}
           </div>
+          {predictedFraction && (
+            <p className="text-lg font-medium" style={{ fontFamily: 'DM Sans' }}>
+              {isPredictionCorrect() ? (
+                <span className="text-green-600">🎉 Great prediction! Let's see...</span>
+              ) : (
+                <span className="text-red-600">🤔 Let's see what actually happens...</span>
+              )}
+            </p>
+          )}
         </div>
       )}
 
       {showComparison && (
         <div className="mt-6 animate-bounce">
           <span className="text-4xl">⭐</span>
+          <div className="mt-4">
+            <p className="text-xl font-bold text-[#2F2E41] mb-2" style={{ fontFamily: 'Space Grotesk' }}>
+              Each piece is {getCorrectFraction()}!
+            </p>
+            {isPredictionCorrect() ? (
+              <p className="text-lg text-green-600 font-medium" style={{ fontFamily: 'DM Sans' }}>
+                🎉 Your prediction was correct!
+              </p>
+            ) : (
+              <p className="text-lg text-[#FF6F00] font-medium" style={{ fontFamily: 'DM Sans' }}>
+                💡 You predicted {predictedFraction}, but it's actually {getCorrectFraction()}!
+              </p>
+            )}
+          </div>
         </div>
       )}
     </div>
