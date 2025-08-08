@@ -1,6 +1,5 @@
 
 import { useState } from "react";
-import { useTranslation } from 'react-i18next';
 import { cn } from "@/lib/utils";
 import ExerciseOne from "./exercises/ExerciseOne";
 import ExerciseTwo from "./exercises/ExerciseTwo";
@@ -9,36 +8,23 @@ import ExerciseFour from "./exercises/ExerciseFour";
 import ExerciseFive from "./exercises/ExerciseFive";
 import CompletionScreen from "./CompletionScreen";
 import ProgressDots from "./ProgressDots";
-import { useTutorMessages } from "../hooks/useTutorMessages";
 
 const FractionExplorer = () => {
   const [currentExercise, setCurrentExercise] = useState(1);
   const [completedExercises, setCompletedExercises] = useState<number[]>([]);
-  const { t } = useTranslation();
-  const { sendTutorMessage } = useTutorMessages();
 
   const completeExercise = (exerciseNumber: number) => {
     if (!completedExercises.includes(exerciseNumber)) {
       setCompletedExercises([...completedExercises, exerciseNumber]);
     }
     
-    // Send completion message to tutor
-    sendTutorMessage('success', 'messages.exerciseCompleted', { 
-      exerciseName: t(`exercises.exercise${exerciseNumber}.title`)
-    });
-    
     if (exerciseNumber < 5) {
       setTimeout(() => {
         setCurrentExercise(exerciseNumber + 1);
-        // Send instruction for next exercise
-        sendTutorMessage('instruction', 'messages.exerciseStarted', {
-          exerciseName: t(`exercises.exercise${exerciseNumber + 1}.title`)
-        });
       }, 2000); // Show success feedback before moving on
     } else {
       setTimeout(() => {
         setCurrentExercise(6); // Show completion screen
-        sendTutorMessage('success', 'messages.gameCompleted');
       }, 2000);
     }
   };
@@ -46,9 +32,6 @@ const FractionExplorer = () => {
   const resetGame = () => {
     setCurrentExercise(1);
     setCompletedExercises([]);
-    sendTutorMessage('instruction', 'messages.exerciseStarted', {
-      exerciseName: t('exercises.exercise1.title')
-    });
   };
 
   return (
@@ -56,10 +39,10 @@ const FractionExplorer = () => {
       <div className="bg-white rounded-[50px] border-l-[10px] border-b-[10px] border-[#2F2E41] p-8 shadow-lg">
         <div className="text-center mb-8">
           <h1 className="font-bold text-5xl md:text-6xl text-[#2F2E41] mb-4" style={{ fontFamily: 'Space Grotesk' }}>
-            {t('app.title')}
+            Fraction Explorer
           </h1>
           <p className="text-xl text-[#2F2E41] font-medium" style={{ fontFamily: 'DM Sans' }}>
-            {t('app.subtitle')}
+            Split the Square! 🟧
           </p>
         </div>
 
