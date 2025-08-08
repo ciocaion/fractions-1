@@ -1,0 +1,56 @@
+{
+  "app.title": "Fraction Explorer",
+  "app.subtitle": "Split the Square! 🟧",
+
+  "exercise.1.title": "Exercise 1: Split the Whole",
+  "exercise.1.instruction.tapToSplit": "Tap the square to split it in half! ✨",
+  "exercise.1.question.whatFraction": "What fraction did you create?",
+  "exercise.1.feedback.correct": "Nice! You made two halves!",
+  "exercise.1.feedback.tryAgain": "Try again! Look at the two equal parts.",
+
+  "exercise.2.title": "Exercise 2: Split One Half",
+  "exercise.2.instruction.tapTop": "Tap the top half to split it again! 🔄",
+  "exercise.2.question.topPiece": "What's the top piece now?",
+  "exercise.2.question.sum": "How much is ¼ + ¼?",
+  "exercise.2.feedback.correctQuarter": "Perfect! That's ¼!",
+  "exercise.2.feedback.correctSum": "Excellent! ¼ + ¼ = ½!",
+
+  "exercise.3.title": "Exercise 3: Split Another Side",
+  "exercise.3.instruction.tapRight": "Tap the right side to split it too! 🔄",
+  "exercise.3.instruction.pickAnyTwo": "Pick any two parts! They're all the same size! 👆",
+  "exercise.3.selected": "Selected: {{count}}/2",
+  "exercise.3.question.sum": "How much is ¼ + ¼?",
+  "exercise.3.feedback.correctChoice": "Great choice! All parts are ¼!",
+  "exercise.3.feedback.correctSum": "Excellent! ¼ + ¼ = ½!",
+
+  "exercise.4.title": "Exercise 4: Build from Parts",
+  "exercise.4.instruction.dragPieces": "Drag the correct pieces to complete the square! 🧩",
+  "exercise.4.feedback.complete": "Perfect! ¼ + ¼ + ½ = 1 whole!",
+
+  "exercise.5.title": "Exercise 5: Predict Before Splitting",
+  "exercise.5.question.howManyPieces": "How many pieces do you want to make? 🤔",
+  "exercise.5.action.splitInto": "Split into {{count}}",
+  "exercise.5.question.predict": "🤔 Before we split, predict: What will each piece be?",
+  "exercise.5.feedback.prediction.correct": "🎉 Great prediction! Let's see...",
+  "exercise.5.feedback.prediction.incorrect": "🤔 Let's see what actually happens...",
+  "exercise.5.feedback.eachPieceIs": "Each piece is {{fraction}}!",
+  "exercise.5.feedback.prediction.wasCorrect": "🎉 Your prediction was correct!",
+  "exercise.5.feedback.prediction.wasIncorrect": "💡 You predicted {{predicted}}, but it's actually {{actual}}!",
+
+  "completion.title": "You Built a Whole!",
+  "completion.subtitle": "Amazing work! You've mastered fractions! ⭐",
+  "completion.learned.title": "You Learned:",
+  "completion.learned.item1": "✅ How to split shapes into equal parts",
+  "completion.learned.item2": "✅ What fractions ½, ¼ look like",
+  "completion.learned.item3": "✅ How to combine fractions",
+  "completion.learned.item4": "✅ That ¼ + ¼ = ½",
+  "completion.learned.item5": "✅ How fractions make a whole!",
+  "completion.playAgain": "Play Again! 🔄",
+  "completion.oneWhole": "1 Whole",
+  "completion.learned.summary": "You Learned:\n✅ How to split shapes into equal parts\n✅ What fractions ½, ¼ look like\n✅ How to combine fractions\n✅ That ¼ + ¼ = ½\n✅ How fractions make a whole!",
+
+  "notFound.title": "404",
+  "notFound.subtitle": "Oops! Page not found",
+  "notFound.returnHome": "Return to Home"
+}
+

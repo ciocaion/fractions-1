@@ -1,11 +1,20 @@
 
 import { cn } from "@/lib/utils";
+import { useTranslation } from 'react-i18next';
+import { useEffect } from 'react';
+import { sendTutorMessage } from '@/lib/tutorMessaging';
 
 interface CompletionScreenProps {
   onReset: () => void;
 }
 
 const CompletionScreen = ({ onReset }: CompletionScreenProps) => {
+  const { t } = useTranslation();
+
+  useEffect(() => {
+    // Send learned summary to tutor
+    sendTutorMessage('success', 'completion.learned.summary');
+  }, []);
   return (
     <div className="text-center">
       <div className="mb-8 animate-bounce">
@@ -13,11 +22,11 @@ const CompletionScreen = ({ onReset }: CompletionScreenProps) => {
       </div>
       
       <h2 className="text-4xl font-bold text-[#FF6F00] mb-6" style={{ fontFamily: 'Space Grotesk' }}>
-        You Built a Whole!
+        {t('completion.title')}
       </h2>
       
       <p className="text-xl text-[#2F2E41] mb-8" style={{ fontFamily: 'DM Sans' }}>
-        Amazing work! You've mastered fractions! ⭐
+        {t('completion.subtitle')}
       </p>
 
       {/* Visual summary of learned fractions */}
@@ -40,7 +49,7 @@ const CompletionScreen = ({ onReset }: CompletionScreenProps) => {
           <span className="text-2xl">=</span>
           <div className="text-center">
             <div className="w-16 h-16 bg-[#FF6F00] rounded mb-2 animate-pulse"></div>
-            <span className="text-sm font-bold" style={{ fontFamily: 'DM Sans' }}>1 Whole</span>
+            <span className="text-sm font-bold" style={{ fontFamily: 'DM Sans' }}>{t('completion.oneWhole')}</span>
           </div>
         </div>
       </div>
@@ -57,18 +66,7 @@ const CompletionScreen = ({ onReset }: CompletionScreenProps) => {
       </div>
 
       <div className="space-y-4">
-        <div className="bg-[#F0F0F0] rounded-2xl p-6 border-4 border-[#2F2E41]">
-          <h3 className="text-lg font-bold text-[#2F2E41] mb-2" style={{ fontFamily: 'Space Grotesk' }}>
-            You Learned:
-          </h3>
-          <ul className="text-[#2F2E41] space-y-1" style={{ fontFamily: 'DM Sans' }}>
-            <li>✅ How to split shapes into equal parts</li>
-            <li>✅ What fractions ½, ¼ look like</li>
-            <li>✅ How to combine fractions</li>
-            <li>✅ That ¼ + ¼ = ½</li>
-            <li>✅ How fractions make a whole!</li>
-          </ul>
-        </div>
+        {/* Learned summary moved to tutor messaging */}
 
         <button
           onClick={onReset}
@@ -79,8 +77,8 @@ const CompletionScreen = ({ onReset }: CompletionScreenProps) => {
             "shadow-lg hover:shadow-xl"
           )}
           style={{ fontFamily: 'Space Grotesk' }}
-        >
-          Play Again! 🔄
+          >
+          {t('completion.playAgain')}
         </button>
       </div>
     </div>

@@ -1,7 +1,9 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import FractionSelector from "../FractionSelector";
+import { useTranslation } from 'react-i18next';
+import { sendTutorMessage } from '@/lib/tutorMessaging';
 
 interface ExerciseThreeProps {
   onComplete: () => void;
@@ -14,6 +16,7 @@ const ExerciseThree = ({ onComplete }: ExerciseThreeProps) => {
   const [showSumTask, setShowSumTask] = useState(false);
   const [selectedSum, setSelectedSum] = useState<string | null>(null);
   const [sumIsCorrect, setSumIsCorrect] = useState<boolean | null>(null);
+  const { t } = useTranslation();
 
   const handleRightSplit = () => {
     setRightSplit(true);
@@ -29,6 +32,7 @@ const ExerciseThree = ({ onComplete }: ExerciseThreeProps) => {
       if (newSelected.length === 2) {
         // Any two parts are correct since all are ¼
         setIsCorrect(true);
+        sendTutorMessage('success', 'exercise.3.feedback.correctChoice');
         setTimeout(() => {
           setShowSumTask(true);
         }, 1500);
@@ -42,16 +46,41 @@ const ExerciseThree = ({ onComplete }: ExerciseThreeProps) => {
     setSumIsCorrect(correct);
     
     if (correct) {
+      sendTutorMessage('success', 'exercise.3.feedback.correctSum');
       setTimeout(() => {
         onComplete();
       }, 1500);
     }
   };
 
+  useEffect(() => {
+    if (!rightSplit) {
+      sendTutorMessage('instruction', 'exercise.3.instruction.tapRight');
+    }
+  }, [rightSplit]);
+
+  useEffect(() => {
+    if (rightSplit && !showSumTask && isCorrect === null) {
+      sendTutorMessage('instruction', 'exercise.3.instruction.pickAnyTwo');
+    }
+  }, [rightSplit, showSumTask, isCorrect]);
+
+  useEffect(() => {
+    if (rightSplit && !showSumTask && isCorrect === null) {
+      sendTutorMessage('instruction', 'exercise.3.selected', { params: { count: selectedParts.length } });
+    }
+  }, [selectedParts, rightSplit, showSumTask, isCorrect]);
+
+  useEffect(() => {
+    if (showSumTask) {
+      sendTutorMessage('instruction', 'exercise.3.question.sum');
+    }
+  }, [showSumTask]);
+
   return (
     <div className="text-center">
       <h2 className="text-3xl font-bold text-[#2F2E41] mb-8" style={{ fontFamily: 'Space Grotesk' }}>
-        Exercise 3: Split Another Side
+        {t('exercise.3.title')}
       </h2>
       
       <div className="flex justify-center mb-8">
@@ -113,28 +142,13 @@ const ExerciseThree = ({ onComplete }: ExerciseThreeProps) => {
         </div>
       </div>
 
-      {!rightSplit && (
-        <p className="text-lg text-[#2F2E41] mb-4" style={{ fontFamily: 'DM Sans' }}>
-          Tap the right side to split it too! 🔄
-        </p>
-      )}
+      {/* Instruction sent via tutor message */}
 
-      {rightSplit && !showSumTask && isCorrect === null && (
-        <div className="animate-scale-in">
-          <p className="text-lg text-[#2F2E41] mb-6" style={{ fontFamily: 'DM Sans' }}>
-            Pick any two parts! They're all the same size! 👆
-          </p>
-          <p className="text-sm text-[#2F2E41] opacity-75" style={{ fontFamily: 'DM Sans' }}>
-            Selected: {selectedParts.length}/2
-          </p>
-        </div>
-      )}
+      {/* Instructions and selection count sent via tutor messages */}
 
       {showSumTask && (
         <div className="animate-scale-in">
-          <p className="text-lg text-[#2F2E41] mb-6" style={{ fontFamily: 'DM Sans' }}>
-            How much is ¼ + ¼?
-          </p>
+          {/* Question sent via tutor message */}
           <FractionSelector
             options={["1/2", "1/4", "1/3"]}
             onSelect={handleSumSelect}
@@ -149,7 +163,7 @@ const ExerciseThree = ({ onComplete }: ExerciseThreeProps) => {
         <div className="mt-6 animate-bounce">
           <span className="text-4xl">⭐</span>
           <p className="text-2xl font-bold text-[#FF6F00]" style={{ fontFamily: 'Space Grotesk' }}>
-            Great choice! All parts are ¼!
+            {t('exercise.3.feedback.correctChoice')}
           </p>
         </div>
       )}
@@ -157,9 +171,7 @@ const ExerciseThree = ({ onComplete }: ExerciseThreeProps) => {
       {sumIsCorrect === true && (
         <div className="mt-6 animate-bounce">
           <span className="text-4xl">🔨</span>
-          <p className="text-2xl font-bold text-[#FF6F00]" style={{ fontFamily: 'Space Grotesk' }}>
-            Excellent! ¼ + ¼ = ½!
-          </p>
+          {/* Success message sent via tutor messaging only */}
         </div>
       )}
     </div>

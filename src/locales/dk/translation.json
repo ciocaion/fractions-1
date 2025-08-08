@@ -1,0 +1,56 @@
+{
+  "app.title": "Brøk-Explorer",
+  "app.subtitle": "Del kvadratet! 🟧",
+
+  "exercise.1.title": "Øvelse 1: Del helheden",
+  "exercise.1.instruction.tapToSplit": "Tryk på kvadratet for at dele det i to! ✨",
+  "exercise.1.question.whatFraction": "Hvilken brøk lavede du?",
+  "exercise.1.feedback.correct": "Godt! Du lavede to halve!",
+  "exercise.1.feedback.tryAgain": "Prøv igen! Kig på de to lige store dele.",
+
+  "exercise.2.title": "Øvelse 2: Del den ene halvdel",
+  "exercise.2.instruction.tapTop": "Tryk på den øverste halvdel for at dele den igen! 🔄",
+  "exercise.2.question.topPiece": "Hvad er den øverste del nu?",
+  "exercise.2.question.sum": "Hvor meget er ¼ + ¼?",
+  "exercise.2.feedback.correctQuarter": "Perfekt! Det er ¼!",
+  "exercise.2.feedback.correctSum": "Fremragende! ¼ + ¼ = ½!",
+
+  "exercise.3.title": "Øvelse 3: Del en anden side",
+  "exercise.3.instruction.tapRight": "Tryk på højre side for også at dele den! 🔄",
+  "exercise.3.instruction.pickAnyTwo": "Vælg to vilkårlige dele! De er alle lige store! 👆",
+  "exercise.3.selected": "Valgt: {{count}}/2",
+  "exercise.3.question.sum": "Hvor meget er ¼ + ¼?",
+  "exercise.3.feedback.correctChoice": "Godt valg! Alle dele er ¼!",
+  "exercise.3.feedback.correctSum": "Fremragende! ¼ + ¼ = ½!",
+
+  "exercise.4.title": "Øvelse 4: Byg af dele",
+  "exercise.4.instruction.dragPieces": "Træk de rigtige stykker for at fuldende kvadratet! 🧩",
+  "exercise.4.feedback.complete": "Perfekt! ¼ + ¼ + ½ = 1 hel!",
+
+  "exercise.5.title": "Øvelse 5: Forudsig før deling",
+  "exercise.5.question.howManyPieces": "Hvor mange dele vil du lave? 🤔",
+  "exercise.5.action.splitInto": "Del i {{count}}",
+  "exercise.5.question.predict": "🤔 Før vi deler, forudsig: Hvad bliver hver del?",
+  "exercise.5.feedback.prediction.correct": "🎉 Flot forudsigelse! Lad os se...",
+  "exercise.5.feedback.prediction.incorrect": "🤔 Lad os se, hvad der faktisk sker...",
+  "exercise.5.feedback.eachPieceIs": "Hver del er {{fraction}}!",
+  "exercise.5.feedback.prediction.wasCorrect": "🎉 Din forudsigelse var korrekt!",
+  "exercise.5.feedback.prediction.wasIncorrect": "💡 Du forudsagde {{predicted}}, men det er faktisk {{actual}}!",
+
+  "completion.title": "Du byggede en hel!",
+  "completion.subtitle": "Fantastisk arbejde! Du har mestret brøker! ⭐",
+  "completion.learned.title": "Du lærte:",
+  "completion.learned.item1": "✅ Hvordan man deler figurer i lige store dele",
+  "completion.learned.item2": "✅ Hvordan brøkerne ½, ¼ ser ud",
+  "completion.learned.item3": "✅ Hvordan man kombinerer brøker",
+  "completion.learned.item4": "✅ At ¼ + ¼ = ½",
+  "completion.learned.item5": "✅ Hvordan brøker danner en hel!",
+  "completion.playAgain": "Spil igen! 🔄",
+  "completion.oneWhole": "1 hel",
+  "completion.learned.summary": "Du lærte:\n✅ Hvordan man deler figurer i lige store dele\n✅ Hvordan brøkerne ½, ¼ ser ud\n✅ Hvordan man kombinerer brøker\n✅ At ¼ + ¼ = ½\n✅ Hvordan brøker danner en hel!",
+
+  "notFound.title": "404",
+  "notFound.subtitle": "Ups! Siden blev ikke fundet",
+  "notFound.returnHome": "Tilbage til forsiden"
+}
+

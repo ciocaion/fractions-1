@@ -1,6 +1,8 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
+import { useTranslation } from 'react-i18next';
+import { sendTutorMessage } from '@/lib/tutorMessaging';
 
 interface ExerciseFourProps {
   onComplete: () => void;
@@ -12,6 +14,7 @@ const ExerciseFour = ({ onComplete }: ExerciseFourProps) => {
   const [usedPieces, setUsedPieces] = useState<number[]>([]);
   const [isComplete, setIsComplete] = useState(false);
   const [draggedPiece, setDraggedPiece] = useState<number | null>(null);
+  const { t } = useTranslation();
 
   const dropZones = [
     { id: 0, correctPiece: "1/4", color: "#90EE90" },
@@ -57,6 +60,7 @@ const ExerciseFour = ({ onComplete }: ExerciseFourProps) => {
       
       if (allCorrectPieces && usedPieces.length === 2) { // Only need 3 pieces total (2 quarters + 1 half)
         setIsComplete(true);
+        sendTutorMessage('success', 'exercise.4.feedback.complete');
         setTimeout(() => {
           onComplete();
         }, 2000);
@@ -73,10 +77,16 @@ const ExerciseFour = ({ onComplete }: ExerciseFourProps) => {
     }
   };
 
+  useEffect(() => {
+    if (!isComplete) {
+      sendTutorMessage('instruction', 'exercise.4.instruction.dragPieces');
+    }
+  }, [isComplete]);
+
   return (
     <div className="text-center">
       <h2 className="text-3xl font-bold text-[#2F2E41] mb-8" style={{ fontFamily: 'Space Grotesk' }}>
-        Exercise 4: Build from Parts
+        {t('exercise.4.title')}
       </h2>
       
       {/* Drop zones - the square frame */}
@@ -112,9 +122,7 @@ const ExerciseFour = ({ onComplete }: ExerciseFourProps) => {
       {/* Available pieces */}
       {!isComplete && (
         <div className="animate-scale-in">
-          <p className="text-lg text-[#2F2E41] mb-6" style={{ fontFamily: 'DM Sans' }}>
-            Drag the correct pieces to complete the square! 🧩
-          </p>
+          {/* Instruction sent via tutor message */}
           <div className="flex justify-center space-x-4">
             {availablePieces.map((piece, index) => (
               <div
@@ -146,9 +154,7 @@ const ExerciseFour = ({ onComplete }: ExerciseFourProps) => {
       {isComplete && (
         <div className="mt-6 animate-bounce">
           <span className="text-4xl">🎉</span>
-          <p className="text-2xl font-bold text-[#FF6F00]" style={{ fontFamily: 'Space Grotesk' }}>
-            Perfect! ¼ + ¼ + ½ = 1 whole!
-          </p>
+          {/* Success message sent via tutor messaging only */}
         </div>
       )}
     </div>

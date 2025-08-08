@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
+import { useTranslation } from 'react-i18next';
+import { sendTutorMessage } from '@/lib/tutorMessaging';
 
 interface ExerciseFiveProps {
   onComplete: () => void;
@@ -12,11 +14,12 @@ const ExerciseFive = ({ onComplete }: ExerciseFiveProps) => {
   const [showResult, setShowResult] = useState(false);
   const [currentPiece, setCurrentPiece] = useState(0);
   const [showComparison, setShowComparison] = useState(false);
+  const { t } = useTranslation();
 
   const splitOptions = [
-    { pieces: 2, label: "Split into 2", icon: "🔄" },
-    { pieces: 4, label: "Split into 4", icon: "➕" },
-    { pieces: 8, label: "Split into 8", icon: "✨" },
+    { pieces: 2, icon: "🔄" },
+    { pieces: 4, icon: "➕" },
+    { pieces: 8, icon: "✨" },
   ];
 
   const fractionOptions = ["1/2", "1/4", "1/8"];
@@ -65,6 +68,41 @@ const ExerciseFive = ({ onComplete }: ExerciseFiveProps) => {
   const isPredictionCorrect = () => {
     return predictedFraction === getCorrectFraction();
   };
+
+  useEffect(() => {
+    if (!showPrediction) {
+      sendTutorMessage('instruction', 'exercise.5.question.howManyPieces');
+    }
+  }, [showPrediction]);
+
+  useEffect(() => {
+    if (showPrediction && !showResult) {
+      sendTutorMessage('instruction', 'exercise.5.question.predict');
+    }
+  }, [showPrediction, showResult]);
+
+  useEffect(() => {
+    if (predictedFraction && !showResult) {
+      if (isPredictionCorrect()) {
+        sendTutorMessage('instruction', 'exercise.5.feedback.prediction.correct');
+      } else {
+        sendTutorMessage('instruction', 'exercise.5.feedback.prediction.incorrect');
+      }
+    }
+  }, [predictedFraction, showResult]);
+
+  useEffect(() => {
+    if (showComparison) {
+      sendTutorMessage('success', 'exercise.5.feedback.eachPieceIs', { params: { fraction: getCorrectFraction() } });
+      if (predictedFraction) {
+        if (isPredictionCorrect()) {
+          sendTutorMessage('success', 'exercise.5.feedback.prediction.wasCorrect');
+        } else {
+          sendTutorMessage('success', 'exercise.5.feedback.prediction.wasIncorrect', { params: { predicted: predictedFraction, actual: getCorrectFraction() } });
+        }
+      }
+    }
+  }, [showComparison]);
 
   const renderSplitResult = () => {
     if (!selectedSplit) return null;
@@ -168,7 +206,7 @@ const ExerciseFive = ({ onComplete }: ExerciseFiveProps) => {
   return (
     <div className="text-center">
       <h2 className="text-3xl font-bold text-[#2F2E41] mb-8" style={{ fontFamily: 'Space Grotesk' }}>
-        Exercise 5: Predict Before Splitting
+        {t('exercise.5.title')}
       </h2>
       
       <div className="flex justify-center mb-8">
@@ -181,9 +219,7 @@ const ExerciseFive = ({ onComplete }: ExerciseFiveProps) => {
 
       {!showPrediction && (
         <div className="animate-scale-in">
-          <p className="text-lg text-[#2F2E41] mb-8" style={{ fontFamily: 'DM Sans' }}>
-            How many pieces do you want to make? 🤔
-          </p>
+          {/* Instruction sent via tutor message */}
           <div className="flex justify-center space-x-4">
             {splitOptions.map((option) => (
               <button
@@ -198,7 +234,7 @@ const ExerciseFive = ({ onComplete }: ExerciseFiveProps) => {
                 style={{ fontFamily: 'DM Sans' }}
               >
                 <span className="text-2xl">{option.icon}</span>
-                <span className="text-sm font-medium">{option.label}</span>
+                <span className="text-sm font-medium">{t('exercise.5.action.splitInto', { count: option.pieces })}</span>
               </button>
             ))}
           </div>
@@ -207,9 +243,7 @@ const ExerciseFive = ({ onComplete }: ExerciseFiveProps) => {
 
       {showPrediction && !showResult && (
         <div className="animate-scale-in">
-          <p className="text-lg text-[#2F2E41] mb-6" style={{ fontFamily: 'DM Sans' }}>
-            🤔 Before we split, predict: What will each piece be?
-          </p>
+          {/* Instruction sent via tutor message */}
           <div className="flex justify-center space-x-4 mb-4">
             {fractionOptions.map((fraction) => (
               <button
@@ -232,15 +266,7 @@ const ExerciseFive = ({ onComplete }: ExerciseFiveProps) => {
               </button>
             ))}
           </div>
-          {predictedFraction && (
-            <p className="text-lg font-medium" style={{ fontFamily: 'DM Sans' }}>
-              {isPredictionCorrect() ? (
-                <span className="text-green-600">🎉 Great prediction! Let's see...</span>
-              ) : (
-                <span className="text-red-600">🤔 Let's see what actually happens...</span>
-              )}
-            </p>
-          )}
+          {/* Prediction feedback sent via tutor message */}
         </div>
       )}
 
@@ -249,15 +275,15 @@ const ExerciseFive = ({ onComplete }: ExerciseFiveProps) => {
           <span className="text-4xl">⭐</span>
           <div className="mt-4">
             <p className="text-xl font-bold text-[#2F2E41] mb-2" style={{ fontFamily: 'Space Grotesk' }}>
-              Each piece is {getCorrectFraction()}!
+              {t('exercise.5.feedback.eachPieceIs', { fraction: getCorrectFraction() })}
             </p>
             {isPredictionCorrect() ? (
               <p className="text-lg text-green-600 font-medium" style={{ fontFamily: 'DM Sans' }}>
-                🎉 Your prediction was correct!
+                {t('exercise.5.feedback.prediction.wasCorrect')}
               </p>
             ) : (
               <p className="text-lg text-[#FF6F00] font-medium" style={{ fontFamily: 'DM Sans' }}>
-                💡 You predicted {predictedFraction}, but it's actually {getCorrectFraction()}!
+                {t('exercise.5.feedback.prediction.wasIncorrect', { predicted: predictedFraction ?? '', actual: getCorrectFraction() })}
               </p>
             )}
           </div>

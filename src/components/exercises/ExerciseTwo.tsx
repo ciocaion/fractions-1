@@ -1,7 +1,9 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import FractionSelector from "../FractionSelector";
+import { useTranslation } from 'react-i18next';
+import { sendTutorMessage } from '@/lib/tutorMessaging';
 
 interface ExerciseTwoProps {
   onComplete: () => void;
@@ -15,6 +17,7 @@ const ExerciseTwo = ({ onComplete }: ExerciseTwoProps) => {
   const [showSumTask, setShowSumTask] = useState(false);
   const [selectedSum, setSelectedSum] = useState<string | null>(null);
   const [sumIsCorrect, setSumIsCorrect] = useState<boolean | null>(null);
+  const { t } = useTranslation();
 
   const handleTopSplit = () => {
     setTopSplit(true);
@@ -29,6 +32,7 @@ const ExerciseTwo = ({ onComplete }: ExerciseTwoProps) => {
     setIsCorrect(correct);
     
     if (correct) {
+      sendTutorMessage('success', 'exercise.2.feedback.correctQuarter');
       setTimeout(() => {
         setShowSumTask(true);
       }, 1500);
@@ -41,16 +45,35 @@ const ExerciseTwo = ({ onComplete }: ExerciseTwoProps) => {
     setSumIsCorrect(correct);
     
     if (correct) {
+      sendTutorMessage('success', 'exercise.2.feedback.correctSum');
       setTimeout(() => {
         onComplete();
       }, 1500);
     }
   };
 
+  useEffect(() => {
+    if (showSelector && !showSumTask) {
+      sendTutorMessage('instruction', 'exercise.2.question.topPiece');
+    }
+  }, [showSelector, showSumTask]);
+
+  useEffect(() => {
+    if (!topSplit) {
+      sendTutorMessage('instruction', 'exercise.2.instruction.tapTop');
+    }
+  }, [topSplit]);
+
+  useEffect(() => {
+    if (showSumTask) {
+      sendTutorMessage('instruction', 'exercise.2.question.sum');
+    }
+  }, [showSumTask]);
+
   return (
     <div className="text-center">
       <h2 className="text-3xl font-bold text-[#2F2E41] mb-8" style={{ fontFamily: 'Space Grotesk' }}>
-        Exercise 2: Split One Half
+        {t('exercise.2.title')}
       </h2>
       
       <div className="flex justify-center mb-8">
@@ -88,17 +111,11 @@ const ExerciseTwo = ({ onComplete }: ExerciseTwoProps) => {
         </div>
       </div>
 
-      {!topSplit && (
-        <p className="text-lg text-[#2F2E41] mb-4" style={{ fontFamily: 'DM Sans' }}>
-          Tap the top half to split it again! 🔄
-        </p>
-      )}
+      {/* Instruction sent via tutor message */}
 
       {showSelector && !showSumTask && (
         <div className="animate-scale-in">
-          <p className="text-lg text-[#2F2E41] mb-6" style={{ fontFamily: 'DM Sans' }}>
-            What's the top piece now?
-          </p>
+          {/* Question sent via tutor message */}
           <FractionSelector
             options={["1/4", "1/2", "1/8"]}
             onSelect={handleFractionSelect}
@@ -111,9 +128,7 @@ const ExerciseTwo = ({ onComplete }: ExerciseTwoProps) => {
 
       {showSumTask && (
         <div className="animate-scale-in">
-          <p className="text-lg text-[#2F2E41] mb-6" style={{ fontFamily: 'DM Sans' }}>
-            How much is ¼ + ¼?
-          </p>
+          {/* Question sent via tutor message */}
           <FractionSelector
             options={["1/2", "1/4", "1/8"]}
             onSelect={handleSumSelect}
@@ -128,7 +143,7 @@ const ExerciseTwo = ({ onComplete }: ExerciseTwoProps) => {
         <div className="mt-6 animate-bounce">
           <span className="text-4xl">⭐</span>
           <p className="text-2xl font-bold text-[#FF6F00]" style={{ fontFamily: 'Space Grotesk' }}>
-            Perfect! That's ¼!
+            {t('exercise.2.feedback.correctQuarter')}
           </p>
         </div>
       )}
@@ -136,9 +151,7 @@ const ExerciseTwo = ({ onComplete }: ExerciseTwoProps) => {
       {sumIsCorrect === true && (
         <div className="mt-6 animate-bounce">
           <span className="text-4xl">🎉</span>
-          <p className="text-2xl font-bold text-[#FF6F00]" style={{ fontFamily: 'Space Grotesk' }}>
-            Excellent! ¼ + ¼ = ½!
-          </p>
+          {/* Success message sent via tutor messaging only */}
         </div>
       )}
     </div>

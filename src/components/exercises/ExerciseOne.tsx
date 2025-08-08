@@ -1,7 +1,9 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import FractionSelector from "../FractionSelector";
+import { useTranslation } from 'react-i18next';
+import { sendTutorMessage } from '@/lib/tutorMessaging';
 
 interface ExerciseOneProps {
   onComplete: () => void;
@@ -12,6 +14,7 @@ const ExerciseOne = ({ onComplete }: ExerciseOneProps) => {
   const [showSelector, setShowSelector] = useState(false);
   const [selectedFraction, setSelectedFraction] = useState<string | null>(null);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+  const { t } = useTranslation();
 
   const handleSplit = () => {
     setIsSplit(true);
@@ -26,16 +29,26 @@ const ExerciseOne = ({ onComplete }: ExerciseOneProps) => {
     setIsCorrect(correct);
     
     if (correct) {
+      sendTutorMessage('success', 'exercise.1.feedback.correct');
       setTimeout(() => {
         onComplete();
       }, 1500);
     }
+    if (!correct) {
+      sendTutorMessage('instruction', 'exercise.1.feedback.tryAgain');
+    }
   };
+
+  useEffect(() => {
+    if (showSelector) {
+      sendTutorMessage('instruction', 'exercise.1.question.whatFraction');
+    }
+  }, [showSelector]);
 
   return (
     <div className="text-center">
       <h2 className="text-3xl font-bold text-[#2F2E41] mb-8" style={{ fontFamily: 'Space Grotesk' }}>
-        Exercise 1: Split the Whole
+        {t('exercise.1.title')}
       </h2>
       
       <div className="flex justify-center mb-8">
@@ -75,17 +88,11 @@ const ExerciseOne = ({ onComplete }: ExerciseOneProps) => {
         </div>
       </div>
 
-      {!isSplit && (
-        <p className="text-lg text-[#2F2E41] mb-4" style={{ fontFamily: 'DM Sans' }}>
-          Tap the square to split it in half! ✨
-        </p>
-      )}
+      {/* Instruction sent via tutor message */}
 
       {showSelector && (
         <div className="animate-scale-in">
-          <p className="text-lg text-[#2F2E41] mb-6" style={{ fontFamily: 'DM Sans' }}>
-            What fraction did you create?
-          </p>
+          {/* Question sent via tutor message */}
           <FractionSelector
             options={["1/2", "1/3", "1/4"]}
             onSelect={handleFractionSelect}
@@ -100,19 +107,12 @@ const ExerciseOne = ({ onComplete }: ExerciseOneProps) => {
         <div className="mt-6 animate-bounce">
           <span className="text-4xl">⭐</span>
           <p className="text-2xl font-bold text-[#FF6F00]" style={{ fontFamily: 'Space Grotesk' }}>
-            Nice! You made two halves!
+            {t('exercise.1.feedback.correct')}
           </p>
         </div>
       )}
 
-      {isCorrect === false && (
-        <div className="mt-6">
-          <span className="text-2xl">❓</span>
-          <p className="text-lg text-[#2F2E41]" style={{ fontFamily: 'DM Sans' }}>
-            Try again! Look at the two equal parts.
-          </p>
-        </div>
-      )}
+      {/* Incorrect hint sent via tutor message only */}
     </div>
   );
 };
